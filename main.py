@@ -11,4 +11,3 @@ async def root():
     number = get_account_number(token=token)
     readings = get_hh_readings(account_number=number, token=token)
     return {"account_number": number, "readings": readings}
-

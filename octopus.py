@@ -1,13 +1,11 @@
 import dataclasses
-from datetime import datetime
 import decimal
 import os
+from datetime import datetime
+from typing import List, Optional
 
 import requests
 from dotenv import load_dotenv
-
-
-from typing import Dict, List
 
 load_dotenv()
 
@@ -92,15 +90,25 @@ query halfHourlyReadings($accountNumber: String!, $fromDatetime: DateTime, $toDa
 """
 
 
-def get_hh_readings(account_number: str, token: str) -> List[HHReading]:
+def get_hh_readings(
+    account_number: str,
+    token: str,
+    start_at: datetime,
+    end_at: Optional[datetime] = None,
+) -> List[HHReading]:
+
+    variables = {
+        "accountNumber": account_number,
+        # Add the Z so it's parsed as UTC
+        "fromDatetime": start_at.isoformat() + "Z",
+    }
+    if end_at:
+        variables["toDatetime"] = end_at.isoformat() + "Z"
     response = requests.post(
         url=GRAPHQL_URL,
         json={
             "query": GET_HH_BODY,
-            "variables": {
-                "accountNumber": account_number,
-                "fromDatetime": "2022-09-04T15:00:00.000Z",
-            },
+            "variables": variables,
         },
         headers={"authorization": f"JWT {token}"},
     )
