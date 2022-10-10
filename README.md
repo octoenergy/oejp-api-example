@@ -14,3 +14,12 @@ OCTOPUS_PASSWORD=<YOUR PASSWORD>
 ```bash
 uvicorn main:app --reload
 ```
+
+
+## Print Usage
+
+Calculate basic statistics about your electricity usage. Saves output as  svg.
+
+```bash
+python3 usage.py 2022-09-01 2022-09-30
+```
