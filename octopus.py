@@ -1,7 +1,7 @@
 import dataclasses
+import datetime
 import decimal
 import os
-from datetime import datetime
 from typing import List, Optional
 
 import requests
@@ -12,8 +12,8 @@ load_dotenv()
 
 @dataclasses.dataclass(frozen=True)
 class HHReading:
-    start_at: datetime
-    end_at: datetime
+    start_at: datetime.datetime
+    end_at: datetime.datetime
     version: str
     value: decimal.Decimal
 
@@ -93,17 +93,16 @@ query halfHourlyReadings($accountNumber: String!, $fromDatetime: DateTime, $toDa
 def get_hh_readings(
     account_number: str,
     token: str,
-    start_at: datetime,
-    end_at: Optional[datetime] = None,
+    start_at: datetime.datetime,
+    end_at: Optional[datetime.datetime] = None,
 ) -> List[HHReading]:
 
     variables = {
         "accountNumber": account_number,
-        # Add the Z so it's parsed as UTC
-        "fromDatetime": start_at.isoformat() + "Z",
+        "fromDatetime": start_at.isoformat(),
     }
     if end_at:
-        variables["toDatetime"] = end_at.isoformat() + "Z"
+        variables["toDatetime"] = end_at.isoformat()
     response = requests.post(
         url=GRAPHQL_URL,
         json={
@@ -120,8 +119,8 @@ def get_hh_readings(
     for reading_raw in readings_raw:
         readings.append(
             HHReading(
-                start_at=datetime.fromisoformat(reading_raw["startAt"]),
-                end_at=datetime.fromisoformat(reading_raw["endAt"]),
+                start_at=datetime.datetime.fromisoformat(reading_raw["startAt"]),
+                end_at=datetime.datetime.fromisoformat(reading_raw["endAt"]),
                 version=reading_raw["version"],
                 value=decimal.Decimal(reading_raw["value"]),
             )

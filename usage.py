@@ -8,6 +8,7 @@ from rich import console as rich_console
 from rich import table as rich_table
 from rich import text as rich_text
 
+import localtime
 import octopus
 
 PURPLE = "#9400FF"
@@ -57,14 +58,8 @@ def _get_readings(
     return octopus.get_hh_readings(
         account_number=account_number,
         token=token,
-        start_at=datetime.datetime(
-            year=start_date.year, month=start_date.month, day=start_date.day
-        ),
-        end_at=datetime.datetime(
-            year=end_date.year, month=end_date.month, day=end_date.day
-        )
-        if end_date
-        else None,
+        start_at=localtime.midnight(start_date),
+        end_at=localtime.midnight(end_date) if end_date else None,
     )
 
 
