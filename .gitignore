@@ -128,6 +128,11 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# PyCharm
+.idea
 
-.idea/
-/usage.svg
+# MacOS
+.DS_Store
+
+# Rich output
+usage.svg
