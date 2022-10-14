@@ -1,7 +1,14 @@
-# oejp-api-example
-An Example of Using the Octopus Energy API
+# OEJP API example project
 
-## Environment
+A few examples using the Octopus Energy API
+
+## Local setup
+
+Create a virtual environment and install dependencies:
+```bash
+python -m venv env
+pip install -r requirements.txt
+```
 
 Add a .env file to your project root like so:
 ```bash
@@ -9,17 +16,22 @@ OCTOPUS_EMAIL=<YOUR EMAIL>
 OCTOPUS_PASSWORD=<YOUR PASSWORD>
 ```
 
-## Run
+## Run a local API using [FastAPI](https://fastapi.tiangolo.com/)
 
 ```bash
 uvicorn main:app --reload
 ```
 
+You should be able to use the browsable FastAPI to try the API out at [http://localhost:8000/docs](http://localhost:8000/docs).
 
-## Print Usage
+![API docs screenshot](_img/fast-api-screenshot.png)
 
-Calculate basic statistics about your electricity usage. Saves output as  svg.
+## Print usage using [rich](https://github.com/Textualize/rich)
+
+Calculate basic statistics about your electricity usage. The output is saved as an _svg_.
 
 ```bash
-python3 usage.py 2022-09-01 2022-09-30
+python usage.py 2022-10-01 2022-10-14
 ```
+
+![usage screenshot](_img/rich-screenshot.png)
