@@ -48,6 +48,8 @@ def get_token() -> str:
         },
     )
     response_dict = response.json()
+    _validate_response(response)
+
     return response_dict["data"]["obtainKrakenToken"]["token"]
 
 
@@ -71,6 +73,8 @@ def get_account_number(token: str) -> str:
         headers={"authorization": f"JWT {token}"},
     )
     response_dict = response.json()
+    _validate_response(response)
+
     return response_dict["data"]["viewer"]["accounts"][0]["number"]
 
 
@@ -113,6 +117,8 @@ def get_hh_readings(
         },
         headers={"authorization": f"JWT {token}"},
     )
+    _validate_response(response)
+
     response_dict = response.json()
     readings_raw = response_dict["data"]["account"]["properties"][0][
         "electricitySupplyPoints"
@@ -129,3 +135,8 @@ def get_hh_readings(
         )
 
     return readings
+
+
+def _validate_response(response: requests.Response) -> None:
+    if (errors := response.json().get("errors")) and len(errors):
+        raise ValueError(errors)
