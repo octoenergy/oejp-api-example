@@ -9,6 +9,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+API_URL = os.environ["API_URL"]
+OCTOPUS_EMAIL = os.environ["OCTOPUS_EMAIL"]
+OCTOPUS_PASSWORD = os.environ["OCTOPUS_PASSWORD"]
+
 
 @dataclasses.dataclass(frozen=True)
 class HHReading:
@@ -17,8 +21,6 @@ class HHReading:
     version: str
     value: decimal.Decimal
 
-
-GRAPHQL_URL = "https://api.oejp-kraken.energy/v1/graphql/"
 
 AUTH_BODY = """
 mutation obtainKrakenToken($input: ObtainJSONWebTokenInput!) {
@@ -34,13 +36,13 @@ mutation obtainKrakenToken($input: ObtainJSONWebTokenInput!) {
 
 def get_token() -> str:
     response = requests.post(
-        url=GRAPHQL_URL,
+        url=API_URL,
         json={
             "query": AUTH_BODY,
             "variables": {
                 "input": {
-                    "email": os.environ["OCTOPUS_EMAIL"],
-                    "password": os.environ["OCTOPUS_PASSWORD"],
+                    "email": OCTOPUS_EMAIL,
+                    "password": OCTOPUS_PASSWORD,
                 }
             },
         },
@@ -62,7 +64,7 @@ query accountViewer {
 
 def get_account_number(token: str) -> str:
     response = requests.post(
-        url=GRAPHQL_URL,
+        url=API_URL,
         json={
             "query": GET_ACCOUNT_BODY,
         },
@@ -104,7 +106,7 @@ def get_hh_readings(
     if end_at:
         variables["toDatetime"] = end_at.isoformat()
     response = requests.post(
-        url=GRAPHQL_URL,
+        url=API_URL,
         json={
             "query": GET_HH_BODY,
             "variables": variables,
