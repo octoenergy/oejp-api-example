@@ -79,15 +79,16 @@ def get_account_number(token: str) -> str:
 
 
 GET_HH_BODY = """
-query halfHourlyReadings($accountNumber: String!, $fromDatetime: DateTime, $toDatetime: DateTime) {
+query halfHourlyReadings($accountNumber: String!, $fromDatetime: DateTime, $toDatetime: DateTime, $productCode: String!) {
   account(accountNumber: $accountNumber) {
     properties {
       electricitySupplyPoints {
-        halfHourlyReadings(fromDatetime: $fromDatetime, toDatetime: $toDatetime) {
+        halfHourlyReadings(fromDatetime: $fromDatetime, toDatetime: $toDatetime, productCode: $productCode) {
           startAt
           endAt
           version
           value
+          costEstimate
         }
       }
     }
@@ -101,11 +102,13 @@ def get_hh_readings(
     token: str,
     start_at: datetime.datetime,
     end_at: Optional[datetime.datetime] = None,
+    product_code: str
 ) -> List[HHReading]:
 
     variables = {
         "accountNumber": account_number,
         "fromDatetime": start_at.isoformat(),
+        "productCode": product_code,
     }
     if end_at:
         variables["toDatetime"] = end_at.isoformat()
