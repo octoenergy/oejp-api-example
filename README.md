@@ -4,6 +4,8 @@ A few examples using the Octopus Energy API
 
 ## Local setup
 
+**Make sure your Python version is >= 3.8**
+
 Create a virtual environment and install dependencies:
 ```bash
 python -m venv env

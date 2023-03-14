@@ -1,4 +1,5 @@
 import datetime
+from typing import Optional
 
 import pytz
 
@@ -14,14 +15,14 @@ def today() -> datetime.date:
 
 
 def days_in_the_past(
-    num_days: int, date_: datetime.date | None = None
+    num_days: int, date_: Optional[datetime.date] = None
 ) -> datetime.date:
     if not date_:
         date_ = today()
     return date_ - datetime.timedelta(days=num_days)
 
 
-def midnight(date_: datetime.date | None = None) -> datetime.datetime:
+def midnight(date_: Optional[datetime.date] = None) -> datetime.datetime:
     if date_ is None:
         date_ = today()
     naive_midnight = datetime.datetime.combine(date_, datetime.datetime.min.time())
